@@ -1,0 +1,69 @@
+# compiled output
+/dist
+/tmp
+/out-tsc
+.webpack
+
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/tasks.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typing
+tags
+tags.temp
+tags.lock
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Serverless
+.serverless
+.webpack
+.stack-output.json
+
+.env
+.env.local
+
+# Terraform
+.terraform
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+result.json
+
+# Nx cache
+.nx/cache
+
+# Project specific
+apps/accounts/**/junit.xml
+apps/authentication/**/junit.xml
+apps/edi/**/junit.xml

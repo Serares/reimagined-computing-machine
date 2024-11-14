@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",                // Set ECMAScript target version
+    "module": "commonjs",           // Module system for Node.js
+    "rootDir": "./src",             // Source directory
+    "outDir": "./dist",             // Output directory
+    "strict": true,                 // Enable strict type-checking
+    "esModuleInterop": true,         // Enable ECMAScript module compatibility
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": ["src"],               // Files to include
+  "exclude": ["node_modules"]       // Files to exclude
+}
