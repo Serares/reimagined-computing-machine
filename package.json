@@ -7,7 +7,8 @@
     "clean": "rm -rf dist",
     "build:lambda": "npm run clean && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:web": "ts-node ./src/pages/main.ts"
+    "start:web": "ts-node ./src/pages/main.ts",
+    "go:tidy": "cd infra && go mod tidy"
   },
   "keywords": [],
   "author": "",

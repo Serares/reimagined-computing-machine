@@ -1,7 +1,14 @@
 package main
 
 import (
+	"infra/utils"
+	"os"
+
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/joho/godotenv"
+
 	// "github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
@@ -16,20 +23,25 @@ func NewInfraStack(scope constructs.Construct, id string, props *InfraStackProps
 	if props != nil {
 		sprops = props.StackProps
 	}
+	godotenv.Load(".env.dev")
 	stack := awscdk.NewStack(scope, &id, &sprops)
+	env := os.Getenv("ENV")
 
-	// The code that defines your stack goes here
-
-	// example resource
-	// queue := awssqs.NewQueue(stack, jsii.String("InfraQueue"), &awssqs.QueueProps{
-	// 	VisibilityTimeout: awscdk.Duration_Seconds(jsii.Number(300)),
-	// })
+	lambdaRole := utils.CreateLambdaBasicRole(stack, "lambdaRole", env)
+	// Define the Lambda function
+	awslambda.NewFunction(stack, aws.String("a1-pages"), &awslambda.FunctionProps{
+		Runtime: awslambda.Runtime_NODEJS_LATEST(),
+		Handler: aws.String("pages/main.handler"),                     // Adjust to your compiled JS handler path
+		Code:    awslambda.Code_FromAsset(aws.String("../dist"), nil), // Point to dist folder
+		Role:    lambdaRole,
+	})
 
 	return stack
 }
 
 func main() {
 	defer jsii.Close()
+	godotenv.Load(".env.dev")
 
 	app := awscdk.NewApp(nil)
 

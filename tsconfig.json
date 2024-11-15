@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6",                // Set ECMAScript target version
+    "target": "ES2019",                // Set ECMAScript target version
+    "sourceMap": true,
     "module": "commonjs",           // Module system for Node.js
     "rootDir": "./src",             // Source directory
     "outDir": "./dist",             // Output directory
