@@ -1,43 +1,16 @@
 package main
 
 import (
-	"infra/utils"
+	"infra/stacks"
 	"os"
 
 	"github.com/aws/aws-cdk-go/awscdk/v2"
-	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/joho/godotenv"
 
 	// "github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
-	"github.com/aws/constructs-go/constructs/v10"
+
 	"github.com/aws/jsii-runtime-go"
 )
-
-type InfraStackProps struct {
-	awscdk.StackProps
-}
-
-func NewInfraStack(scope constructs.Construct, id string, props *InfraStackProps) awscdk.Stack {
-	var sprops awscdk.StackProps
-	if props != nil {
-		sprops = props.StackProps
-	}
-	godotenv.Load(".env.dev")
-	stack := awscdk.NewStack(scope, &id, &sprops)
-	env := os.Getenv("ENV")
-
-	lambdaRole := utils.CreateLambdaBasicRole(stack, "lambdaRole", env)
-	// Define the Lambda function
-	awslambda.NewFunction(stack, aws.String("a1-pages"), &awslambda.FunctionProps{
-		Runtime: awslambda.Runtime_NODEJS_LATEST(),
-		Handler: aws.String("pages/main.handler"),                     // Adjust to your compiled JS handler path
-		Code:    awslambda.Code_FromAsset(aws.String("../dist"), nil), // Point to dist folder
-		Role:    lambdaRole,
-	})
-
-	return stack
-}
 
 func main() {
 	defer jsii.Close()
@@ -45,11 +18,15 @@ func main() {
 
 	app := awscdk.NewApp(nil)
 
-	NewInfraStack(app, "InfraStack", &InfraStackProps{
-		awscdk.StackProps{
-			Env: env(),
-		},
+	godotenv.Load(".env.dev")
+	env := os.Getenv("ENV")
+
+	stacks.CognitoStack(app, *jsii.Sprintf("CognitoStack-%s", env), &stacks.CognitoStackProps{
+		FACEBOOK_CLIENT_SECRET: os.Getenv("FACEBOOK_CLIENT_SECRET"),
+		GOOGLE_CLIENT_SECRET:   os.Getenv("GOOGLE_CLIENT_SECRET"),
 	})
+
+	stacks.ApiGw(app, *jsii.Sprintf("APIGW-Stack-%s", env), &stacks.ApiGwStackProps{})
 
 	app.Synth(nil)
 }

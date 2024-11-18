@@ -1,8 +1,19 @@
 import { Request, Response } from "express";
-import { handler } from "../handler";
+
+export type IHandlerResponse = {
+  statusCode: number;
+  body: string | Record<string, string>;
+  headers?: Record<string, string> | undefined;
+};
+
+export type IHandler = (event: any) => Promise<IHandlerResponse>;
 
 // Adapter to convert Lambda response to Express response
-export const lambdaToExpress = async (req: Request, res: Response) => {
+export const lambdaToExpress = async (
+  req: Request,
+  res: Response,
+  handler: IHandler
+) => {
   // Create a Lambda-like event object from the Express request
   const event = {
     path: req.path,
